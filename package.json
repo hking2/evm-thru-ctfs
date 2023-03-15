@@ -1,0 +1,15 @@
+{
+  "name": "hardhat-foundry-template",
+  "version": "1.0.0",
+  "description": "hardhat foundry setup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hunter King",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
+    "hardhat": "^2.13.0"
+  }
+}
