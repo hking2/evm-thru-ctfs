@@ -6,31 +6,46 @@ const bn = ethers.BigNumber;
 
 // npx hardhat run scripts/hardhat/escape/dynamic.js
 
-const CONTRACT_ADDRESS = "0x36ce5aa25b99cf6eb019aafd149b97b32cdd4a5b";
+const CONTRACT_ADDRESS = "0x47D2A4c4e3b3cd645484a3AE217cC8c7EAbE60Ae";
 
 const provider = ethers.getDefaultProvider("mainnet", {
   alchemy: process.env.RPC_MAINNET,
   etherscan: process.env.ETHERSCAN_KEY
 })
 
+// *20 hex padded = 32 bytes
+// *static vars are coded directly, dynamics need location reffed
+
 // take first 4 bytes (8 digits after 0x) of keccak hash of function w/ params to get function selector
-const selectorHash = ut.keccak256(ut.toUtf8Bytes("mysteryFunc(uint256,uint256)"));
+const selectorHash = ut.keccak256(ut.toUtf8Bytes("mysteryFunc(uint256[],uint256[])"));
 const selector = selectorHash.slice(2,10);
-console.log(`selector: ${selector}`); // b40d7b75
+console.log(`selector: ${selector}`); // ab33b5ce
+
+// locations of args
+const locationArg1 = ut.hexZeroPad(0x40, 32);
+const locationArg2 = ut.hexZeroPad(0xC0, 32);
+
+// concat padded locations
+const locations = locationArg1.slice(2) + locationArg2.slice(2);
 
 // build args by padding values with 32 bytes (uint256)
-const arg1 = ut.hexValue(3);
-const arg2 = ut.hexValue(4);
+const numofArgs1 = ut.hexZeroPad(ut.hexlify(2), 32);
 
-const paddedArg1 = ut.hexZeroPad(arg1, 32);
-const paddedArg2 = ut.hexZeroPad(arg2, 32);
+const arg1of1 = ut.hexZeroPad(ut.hexValue(1), 32);
+const arg2of1 = ut.hexZeroPad(ut.hexValue(2), 32);
 
-// concat padded args
-const args = paddedArg1.slice(2) + paddedArg2.slice(2);
-// console.log(args);
+const args1 = numofArgs1.slice(2) + arg1of1.slice(2) + arg2of1.slice(2);
+
+const numofArgs2 = ut.hexZeroPad(ut.hexlify(2), 32);
+
+const arg1of2 = ut.hexZeroPad(ut.hexValue(3), 32);
+const arg2of2 = ut.hexZeroPad(ut.hexValue(4), 32);
+
+const args2 = numofArgs2.slice(2) + arg1of2.slice(2) + arg2of2.slice(2);
+
 
 // concat selector and args
-const calldata = "0x" + selector + args;
+const calldata = "0x" + selector + locations + args1 + args2;
 console.log(calldata);
 
 const tx = {
