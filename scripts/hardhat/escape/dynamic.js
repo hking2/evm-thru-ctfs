@@ -23,20 +23,20 @@ console.log(`selector: ${selector}`); // ab33b5ce
 
 // locations of args
 const locationArg1 = ut.hexZeroPad(0x40, 32);
-const locationArg2 = ut.hexZeroPad(0xC0, 32);
+const locationArg2 = ut.hexZeroPad(0xA0, 32); // actual location is 0xC0, but offset by locationArg1, so 0xA0 is accurate
 
 // concat padded locations
 const locations = locationArg1.slice(2) + locationArg2.slice(2);
 
 // build args by padding values with 32 bytes (uint256)
-const numofArgs1 = ut.hexZeroPad(ut.hexlify(2), 32);
+const numofArgs1 = ut.hexZeroPad(ut.hexValue(2), 32);
 
 const arg1of1 = ut.hexZeroPad(ut.hexValue(1), 32);
 const arg2of1 = ut.hexZeroPad(ut.hexValue(2), 32);
 
 const args1 = numofArgs1.slice(2) + arg1of1.slice(2) + arg2of1.slice(2);
 
-const numofArgs2 = ut.hexZeroPad(ut.hexlify(2), 32);
+const numofArgs2 = ut.hexZeroPad(ut.hexValue(2), 32);
 
 const arg1of2 = ut.hexZeroPad(ut.hexValue(3), 32);
 const arg2of2 = ut.hexZeroPad(ut.hexValue(4), 32);
@@ -64,3 +64,20 @@ const tx = {
     console.log("returnVal: ", formatted);
   }
 })()
+
+
+
+0xab33b5ce
+
+0x0000000000000000000000000000000000000000000000000000000000000040
+0x00000000000000000000000000000000000000000000000000000000000000c0
+
+0x0000000000000000000000000000000000000000000000000000000000000002
+
+0x0000000000000000000000000000000000000000000000000000000000000001
+0x0000000000000000000000000000000000000000000000000000000000000002
+
+0x0000000000000000000000000000000000000000000000000000000000000002
+
+0x0000000000000000000000000000000000000000000000000000000000000003
+0x0000000000000000000000000000000000000000000000000000000000000004
